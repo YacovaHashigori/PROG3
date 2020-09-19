@@ -10,7 +10,7 @@ var link_1 = temp[0].getAttribute("href");
 //création d'un tableau contenant toutes les informations d'une carte
 var info_card_1 = [title_1, subtitle_1, resume_1, link_1];
 //affichage à l'aide d'une boucle
-for(let i=0; i<4; i++){
+for (let i = 0; i < 4; i++) {
     console.log(info_card_1[i]);
 }
 
@@ -25,24 +25,31 @@ console.log(conteneur.length);
 
 //--------------1.2.2-------------------
 var tableau_theme = [];
-for(let i=0; i<conteneur.length; i++){
+for (let i = 0; i < conteneur.length; i++) {
     var theme = conteneur[i].querySelector("h3").innerHTML;
-    if (tableau_theme.includes(theme)==false){
+    if (tableau_theme.includes(theme) == false) {
         tableau_theme.push(theme);
     }
 }
 console.log(tableau_theme);
 
 //---------------1.2.3-----------------
-for(let i=0; i<conteneur.length; i++){
+for (let i = 0; i < conteneur.length; i++) {
     conteneur[i].classList.add("active-card");
 }
 
 //--------------1.2.4-----------------
-var tableau_couleurs = ["red", "orange", "sunshine", "yellow", "paleyellow"];
-var all_themes = document.querySelectorAll("h3");
-for(let i=0; i<all_themes.length; i++){
-    all_themes[i].classList.add(tableau_couleurs[i]);
+var tableau_couleurs = ["red", "orange", "sunshine"];
+var card_title = document.querySelectorAll(".link-text > h3");
+
+for (let i = 0; i < card_title.length; i++) {
+    var current_theme = card_title[i].innerText;
+    for (let j = 0; j < tableau_theme.length; j++) {
+
+        if (current_theme.includes(tableau_theme[j])) {
+            card_title[i].classList.add(tableau_couleurs[j]);
+        }
+    }
 }
 
 //----------------1.3.1----------------
@@ -51,15 +58,65 @@ var menu_nav = document.createElement('nav');
 titre_page[0].prepend(menu_nav);
 
 var nav_theme = document.getElementsByTagName('nav');
-var liens = ['#', '#2', '#3'];
+var liens = ['#1', '#2', '#3'];
 
-for (let i=0; i<tableau_theme.length; i++){
-    console.log(tableau_theme[i]);
-    var tab_nav = document.createElement('a');
-    tab_nav.innerText = tableau_theme[i];
-    tab_nav.setAttribute('href', liens[i]);
-    nav_theme[0].append(tab_nav);
+for (let i = 0; i < tableau_theme.length; i++) {
+    add_tab(tableau_theme[i], nav_theme[0], liens[i]);
 }
 //-----------1.3.3------------
+var link = document.createElement("a");
+link.setAttribute("href", "#");
+link.innerText = "Tous";
+nav_theme[0].prepend(link);
 
+var sombre = document.createElement("button");
+var main = document.querySelector("main");
+sombre.innerHTML = "Mode Sombre";
+main.prepend(sombre);
 
+//------------1.3.4------------
+function add_tab(tab_text, parent_element, link) {
+    var new_tab = document.createElement("a");
+    new_tab.innerText = tab_text;
+    new_tab.setAttribute("href", link);
+    parent_element.append(new_tab);
+}
+
+//-----------1.4.1-----------
+sombre.addEventListener("mouseenter", function () {
+    sombre.classList.add("active_sombre");
+})
+sombre.addEventListener("mouseleave", function () {
+    sombre.classList.remove("active_sombre");
+})
+
+//----------1.4.2-----------
+var body = document.querySelector("body");
+sombre.addEventListener("click", function () {
+    body.classList.toggle("mode_sombre");
+    if (body.getAttribute("class") == "mode_sombre") {
+        sombre.innerText = "Retourner en lieux sûr";
+    } else {
+        sombre.innerText = "Mode Sombre";
+    }
+});
+
+//----------1.4.3-----------
+var all_tabs = document.querySelectorAll("a");
+for (let i = 0; i < all_tabs.length; i++) {
+    all_tabs[i].addEventListener("click", function () {
+        for (let j = 0; j < conteneur.length; j++) {
+            conteneur[j].classList.remove("visible", "hidden");
+            if (i == 0) {
+                conteneur[j].classList.remove("hidden");
+            } else {
+                var verif_theme = conteneur[j].querySelector("h3").innerHTML;
+                if (verif_theme.includes(all_tabs[i].innerHTML)) {
+                    conteneur[j].classList.add("visible");
+                } else {
+                    conteneur[j].classList.add("hidden");
+                }
+            }
+        }
+    });
+}
