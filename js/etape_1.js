@@ -27,7 +27,7 @@ console.log(conteneur.length);
 var tableau_theme = [];
 for (let i = 0; i < conteneur.length; i++) {
     var theme = conteneur[i].querySelector("h3").innerHTML;
-    if (tableau_theme.includes(theme) == false) {
+    if (tableau_theme.includes(theme) === false) {
         tableau_theme.push(theme);
     }
 }
@@ -94,7 +94,7 @@ sombre.addEventListener("mouseleave", function () {
 var body = document.querySelector("body");
 sombre.addEventListener("click", function () {
     body.classList.toggle("mode_sombre");
-    if (body.getAttribute("class") == "mode_sombre") {
+    if (body.getAttribute("class") === "mode_sombre") {
         sombre.innerText = "Retourner en lieux sûr";
     } else {
         sombre.innerText = "Mode Sombre";
@@ -107,7 +107,7 @@ for (let i = 0; i < all_tabs.length; i++) {
     all_tabs[i].addEventListener("click", function () {
         for (let j = 0; j < conteneur.length; j++) {
             conteneur[j].classList.remove("visible", "hidden");
-            if (i == 0) {
+            if (i === 0) {
                 conteneur[j].classList.remove("hidden");
             } else {
                 var verif_theme = conteneur[j].querySelector("h3").innerHTML;
