@@ -30,24 +30,3 @@ let tab_liens = [
 	'https://thenextweb.com/',
 ];
 
-var all_datas = [tab_titres,
-tab_descriptions,
-tab_themes,
-tab_liens
-]
-
-var cards = [];
-for(let i=0; i<tab_titres.length; i++){
-    cards[i] = [];
-    for(let j=0; j<all_datas.length; j++){
-        cards[i].push(all_datas[j][i]);
-    }
-}
-
-for(let i=0; i<cards.length; i++){
-    if(i==0){
-        for(let j=0; j<cards[i].length; j++){
-            console.log(cards[i][j]);
-        }
-    }
-}

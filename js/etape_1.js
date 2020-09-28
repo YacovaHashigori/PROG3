@@ -122,3 +122,42 @@ for (let i = 0; i < all_tabs.length; i++) {
 }
 
 //--------------2.1.1---------------
+
+var all_datas = [tab_titres,
+    tab_themes,
+    tab_descriptions,
+    tab_liens
+    ];
+    
+var cards = [];
+for(let i=0; i<tab_titres.length; i++){
+    cards[i] = [];
+    for(let j=0; j<all_datas.length; j++){
+        cards[i].push(all_datas[j][i]);
+    }
+}
+
+for(let i=0; i<cards.length; i++){
+    if(i==0){
+        //test de l'obtention des bonnes valeurs
+        for(let j=0; j<cards[i].length; j++){
+            console.log(cards[i][j]);
+        }        
+    }
+
+    carte_sup = `<div class="link-card">
+                        <div class="link-title">
+                            <h2>${cards[i][0]}</h2>
+                        </div>
+                        <div class="link-text">
+                            <h3>${cards[i][1]}</h3>
+                            <p>${cards[i][2]}</p>
+                        </div>
+                        <div class="link-button">
+                            <a href="${cards[i][3]}"><button>Aller à la page</button></a>
+                        </div>
+                    </div>`;
+
+    var conteneur1 = document.querySelector(".layout");
+    conteneur1.innerHTML += carte_sup;
+}
