@@ -156,6 +156,8 @@ function create_allTabs() {
 
 create_allTabs();
 
+create_allTabs();
+
 //--------------2.1.1---------------
 
 var all_datas = [tab_titres,
