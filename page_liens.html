@@ -77,6 +77,28 @@
             </div>
         </main>
     </div>
+
+    <form class="card_form" action="page_liens.html" methode="POST">
+        <div>
+            <label for="title">Titre de la carte</label>
+            <input type="text" id="title" name="card_title">
+        </div>
+        <div>
+            <label for="theme">Thème de la carte</label>
+            <input type="text" id="theme" name="card_theme">
+        </div>
+        <div>
+            <label for="resume">Description de la carte</label>
+            <textarea id="resume" name="card_resume" placeholder="Votre texte"></textarea>
+        </div>
+        <div>
+            <label for="link">Liens vers la page</label>
+            <input type="text" id="link" name="card_link">
+        </div>
+        <input type="submit">
+    </form>
+
+    </div>
     <script src="js/donnees.js"></script>
     <script src="/js/etape_1.js"></script>
 </body>
