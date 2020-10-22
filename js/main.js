@@ -168,7 +168,7 @@ var all_datas = [tab_titres,
 
 var cards = [];
 
-function add_card() {
+function update_card() {
     for (let i = 0; i < tab_titres.length; i++) {
         cards[i] = [];
         for (let j = 0; j < all_datas.length; j++) {
@@ -202,4 +202,4 @@ function add_card() {
     }
 }
 
-add_card();
+update_card();
