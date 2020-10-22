@@ -1,3 +1,35 @@
+//--------------utilities------------
+function infinite_loop(out, obj){
+    for (var i in obj) {
+        if (Array.isArray(obj[i])){
+            out += i + ": \n";
+            y = obj[i];
+            for (var j in y){
+                if (Array.isArray(y[j])){
+                    out += "Tableau )à plus de deux niveaux";
+                } else {
+                    out += '    ' + j + "-> " + y[j] + "\n";
+                }
+            }
+            
+        } else {
+            out += i + ": " + obj[i] + "\n";
+            console.log('pascool');
+        }
+    }
+    return out;
+}
+
+function dump(obj) {
+    var out = '';
+
+    out += infinite_loop(out, obj);
+    
+    var pre = document.createElement('pre');
+    pre.innerHTML = out;
+    document.body.prepend(pre);
+}
+
 //-----------------1.1.1-------------
 var conteneur = document.querySelectorAll(".link-card");
 
@@ -85,6 +117,7 @@ function create_menuNavigation() {
     return nav_theme;
 }
 nav_theme = create_menuNavigation();
+
 //-----------1.3.3------------
 function selectAll_button() {
     var link = document.createElement("a");
@@ -156,8 +189,6 @@ function create_allTabs() {
 
 create_allTabs();
 
-create_allTabs();
-
 //--------------2.1.1---------------
 
 var all_datas = [tab_titres,
@@ -168,32 +199,25 @@ var all_datas = [tab_titres,
 
 var cards = [];
 
-function update_card() {
-    for (let i = 0; i < tab_titres.length; i++) {
-        cards[i] = [];
-        for (let j = 0; j < all_datas.length; j++) {
-            cards[i].push(all_datas[j][i]);
-        }
-    }
-
-    for (let i = 0; i < cards.length; i++) {
+function add_new_card(all_cards){
+    for (let i = 0; i < all_cards.length; i++) {
         if (i == 0) {
             //test de l'obtention des bonnes valeurs
-            for (let j = 0; j < cards[i].length; j++) {
-                console.log(cards[i][j]);
+            for (let j = 0; j < all_cards[i].length; j++) {
+                console.log(all_cards[i][j]);
             }
         }
 
         carte_sup = `<div class="link-card">
                         <div class="link-title">
-                            <h2>${cards[i][0]}</h2>
+                            <h2>${all_cards[i][0]}</h2>
                         </div>
                         <div class="link-text">
-                            <h3>${cards[i][1]}</h3>
-                            <p>${cards[i][2]}</p>
+                            <h3>${all_cards[i][1]}</h3>
+                            <p>${all_cards[i][2]}</p>
                         </div>
                         <div class="link-button">
-                            <a href="${cards[i][3]}"><button>Aller à la page</button></a>
+                            <a href="${all_cards[i][3]}"><button>Aller à la page</button></a>
                         </div>
                     </div>`;
 
@@ -202,4 +226,33 @@ function update_card() {
     }
 }
 
-update_card();
+function update_card_list() {
+    for (let i = 0; i < tab_titres.length; i++) {
+        cards[i] = [];
+        for (let j = 0; j < all_datas.length; j++) {
+            cards[i].push(all_datas[j][i]);
+        }
+    }
+    dump(cards);
+    add_new_card(cards);
+}
+
+
+update_card_list();
+
+//------------2.2------------
+submit_form = document.getElementById("submit_form");
+console.log(submit_form);
+submit_form.addEventListener("click",get_new_card);
+
+function get_new_card(){
+
+    c_title = document.getElementById("title").value;
+    c_theme = document.getElementById("theme").value;
+    c_resume = document.getElementById("resume").value;
+    c_link = document.getElementById("link").value;
+    new_card = [c_title, c_theme, c_resume, c_link];
+    console.log(new_card);
+
+}
+
