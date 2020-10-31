@@ -1,4 +1,5 @@
-//--------------utilities------------
+window.onload = function(){
+    //--------------utilities------------
 function infinite_loop(out, obj){
     for (var i in obj) {
         if (Array.isArray(obj[i])){
@@ -24,7 +25,7 @@ function dump(obj) {
     var out = '';
 
     out += infinite_loop(out, obj);
-    
+    out += '---------------------';
     var pre = document.createElement('pre');
     pre.innerHTML = out;
     document.body.prepend(pre);
@@ -199,16 +200,28 @@ var all_datas = [tab_titres,
 
 var cards = [];
 
-function add_new_card(all_cards){
-    for (let i = 0; i < all_cards.length; i++) {
-        if (i == 0) {
-            //test de l'obtention des bonnes valeurs
-            for (let j = 0; j < all_cards[i].length; j++) {
-                console.log(all_cards[i][j]);
-            }
-        }
+function add_new_card(all_cards, method='json'){
+    if(method=='byHand'){
+        var byHand = 'up-to-date'
+        var previous_cards = document.querySelectorAll(".up-to-date")
+        console.log(previous_cards);
+    } else { var byHand = '' }
+    
+    if(typeof previous_cards !=='undefined' && previous_cards.length > 0){
+        console.log('c cool');
+        previous_cards.forEach(element => {
+            element.remove()
+        });
+    }
 
-        carte_sup = `<div class="link-card">
+    for (i = 0; i < all_cards.length; i++) {
+        // if (count == 0) {
+        //     //test de l'obtention des bonnes valeurs
+        //     for (let j = 0; j < all_cards[i].length; j++) {
+        //         console.log(all_cards[i][j]);
+        //     }
+        // }
+        carte_sup = `<div class="link-card ${byHand}">
                         <div class="link-title">
                             <h2>${all_cards[i][0]}</h2>
                         </div>
@@ -217,12 +230,14 @@ function add_new_card(all_cards){
                             <p>${all_cards[i][2]}</p>
                         </div>
                         <div class="link-button">
-                            <a href="${all_cards[i][3]}"><button>Aller à la page</button></a>
+                            <a href="${all_cards[i][3]}">
+                                <button>Aller à la page</button>
+                            </a>
                         </div>
                     </div>`;
 
         var conteneur1 = document.querySelector(".layout");
-        conteneur1.innerHTML += carte_sup;
+        conteneur1.innerHTML += carte_sup;      
     }
 }
 
@@ -233,7 +248,6 @@ function update_card_list() {
             cards[i].push(all_datas[j][i]);
         }
     }
-    dump(cards);
     add_new_card(cards);
 }
 
@@ -241,18 +255,22 @@ function update_card_list() {
 update_card_list();
 
 //------------2.2------------
-submit_form = document.getElementById("submit_form");
-console.log(submit_form);
+let submit_form = document.getElementById("submit_form");
+var count = 0;
+var new_card = [];
+
 submit_form.addEventListener("click",get_new_card);
 
 function get_new_card(){
-
     c_title = document.getElementById("title").value;
     c_theme = document.getElementById("theme").value;
     c_resume = document.getElementById("resume").value;
     c_link = document.getElementById("link").value;
-    new_card = [c_title, c_theme, c_resume, c_link];
-    console.log(new_card);
+    new_card[count] = [c_title, c_theme, c_resume, c_link];
+    store_added_cards = new_card;
+    add_new_card(new_card, 'byHand');
+    count++;
+}
 
 }
 
