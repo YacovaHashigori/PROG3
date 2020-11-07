@@ -32,27 +32,23 @@ function dump(obj) {
     var pre = document.createElement('pre');
     pre.innerHTML = out;
     document.body.prepend(pre);
+    // could be usefull : alert(JSON.stringify(card_1, null, 4));
 }
 
 //-----------------1.1.1-------------
-var container = document.querySelectorAll(".link-card");
+var containers = document.querySelectorAll(".link-card");
 
-// This function obtains the differents information about the first card of the DOM and log it
+// This function obtains the NodeList from the first card of the DOM and log it
 function get_cardContent() {
 
-    // Get the first container (card) of the DOM
-    var card_1 = container[0];
-    
-    var title_1 = card_1.querySelector("h2").innerText;
-    var subtitle_1 = card_1.querySelector("h3").innerText;
-    var recap_1 = card_1.querySelector("p").innerText;
-    var temp = card_1.getElementsByTagName("button");
-    var link_1 = temp[0].getAttribute("href");
-    
-    var info_card_1 = [title_1, subtitle_1, recap_1, link_1];
-    for (let i = 0; i < 4; i++) {
-        console.log(info_card_1[i]);
+    // Get the first containers (card) of the DOM
+    var card_1 = containers[0]
+    var card_tags = ["h2", "h3", "p", "button"]
+    var card_elements = {}
+    for(let i=0; i<card_tags.length; i++){
+    card_elements[card_tags[i]] = card_1.querySelector(card_tags[i]).innerText
     }
+    console.log(card_elements)
 }
 get_cardContent();
 
@@ -62,20 +58,20 @@ get_cardContent();
 function add_fewStyle() {
     var main_title = document.querySelector("main>h1");
     main_title.classList.add("main_title_modified");
-    container[0].classList.add("active-card");
+    containers[0].classList.add("active-card");
 }
 add_fewStyle();
 
 //---------------1.2.1-------------------
-console.log(container.length);
+console.log(containers.length);
 
 //--------------1.2.2-------------------
 var array_theme = [];
 
 // Obtains all the themes that are present on the page and displays each different theme once
 function get_arrayTheme() {
-    for (let i = 0; i < container.length; i++) {
-        var theme = container[i].querySelector("h3").innerHTML;
+    for (let i = 0; i < containers.length; i++) {
+        var theme = containers[i].querySelector("h3").innerHTML;
         if (array_theme.includes(theme) === false) {
             array_theme.push(theme);
         }
@@ -88,8 +84,8 @@ get_arrayTheme();
 
 // Add a hover animation on each card
 function add_cardHover() {
-    for (let i = 0; i < container.length; i++) {
-        container[i].classList.add("active-card");
+    for (let i = 0; i < containers.length; i++) {
+        containers[i].classList.add("active-card");
     }
 }
 add_cardHover();
@@ -193,16 +189,16 @@ function display_selectedCards() {
     var all_tabs = document.querySelectorAll("a");
     for (let i = 0; i < all_tabs.length; i++) {
         all_tabs[i].addEventListener("click", function () {
-            for (let j = 0; j < container.length; j++) {
-                container[j].classList.remove("visible", "hidden");
+            for (let j = 0; j < containers.length; j++) {
+                containers[j].classList.remove("visible", "hidden");
                 if (i === 0) {
-                    container[j].classList.remove("hidden");
+                    containers[j].classList.remove("hidden");
                 } else {
-                    var verif_theme = container[j].querySelector("h3").innerHTML;
+                    var verif_theme = containers[j].querySelector("h3").innerHTML;
                     if (verif_theme.includes(all_tabs[i].innerHTML)) {
-                        container[j].classList.add("visible");
+                        containers[j].classList.add("visible");
                     } else {
-                        container[j].classList.add("hidden");
+                        containers[j].classList.add("hidden");
                     }
                 }
             }
@@ -260,8 +256,8 @@ function add_new_card(all_cards, method='json'){
                         </div>
                     </div>`;
 
-        var container1 = document.querySelector(".layout");
-        container1.innerHTML += card_to_add;      
+        var containers1 = document.querySelector(".layout");
+        containers1.innerHTML += card_to_add;      
     }
 }
 
