@@ -88,7 +88,6 @@ function add_cardHover() {
         containers[i].classList.add("active-card")
     }
 }
-add_cardHover()
 
 //--------------1.2.4-----------------
 
@@ -107,7 +106,6 @@ function add_cardColor() {
         }
     }
 }
-add_cardColor()
 
 //----------------1.3.1----------------
 
@@ -242,22 +240,24 @@ function add_new_card(all_cards, method='json'){
         //     }
         // }
         card_to_add = `<div class="link-card ${byHand}">
-                        <div class="link-title">
-                            <h2>${all_cards[i][0]}</h2>
-                        </div>
-                        <div class="link-text">
-                            <h3>${all_cards[i][1]}</h3>
-                            <p>${all_cards[i][2]}</p>
-                        </div>
-                        <div class="link-button">
-                            <a href="${all_cards[i][3]}">
-                                <button>Aller à la page</button>
-                            </a>
-                        </div>
-                    </div>`;
+                            <div class="link-title">
+                                <h2>${all_cards[i][0]}</h2>
+                            </div>
+                            <div class="link-text">
+                                <h3>${all_cards[i][1]}</h3>
+                                <p>${all_cards[i][2]}</p>
+                            </div>
+                            <div class="link-button">
+                                <a href="${all_cards[i][3]}">
+                                    <button>Aller à la page</button>
+                                </a>
+                            </div>
+                        </div>`;
 
         var containers1 = document.querySelector(".layout")
-        containers1.innerHTML += card_to_add  
+        containers1.innerHTML += card_to_add
+        add_cardHover()
+        add_cardColor()
     }
 }
 
@@ -272,8 +272,6 @@ function update_card_list() {
     }
     add_new_card(cards)
 }
-
-
 update_card_list()
 
 //------------2.2------------
@@ -283,7 +281,7 @@ var new_card = []
 
 submit_form.addEventListener("click",get_new_card)
 
-// Obtains the value emmited by the user when clicking on submit button 
+// Obtains the value emmited by the user when clicking on submit button and check its validity
 function get_new_card(){
     c_title = document.getElementById("title").value
     c_theme = document.getElementById("theme").value
@@ -291,8 +289,21 @@ function get_new_card(){
     c_link = document.getElementById("link").value
     new_card[count] = [c_title, c_theme, c_recap, c_link]
     store_added_cards = new_card
-    add_new_card(new_card, 'byHand')
-    count++
+    checked_card = check_pass(new_card, count);
+    if(checked_card[count]!=null){
+        add_new_card(checked_card, 'byHand')
+        count++
+    } else { alert("Tous les champs du formulaire doivent être remplis !")}
+}
+
+// Check if each field of the card isn't empty
+function check_pass(card, index){
+    card[index].forEach(element => {
+        if(element==''){
+            card[index]=null
+        }
+    })
+    return card
 }
 
 //}
