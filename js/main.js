@@ -313,6 +313,20 @@ function check_pass(card, index) {
     return card
 }
 
+//----------------2.5---------------------
+
+function delete_card(){
+    for(const [key, value] of Object.entries(containers)){
+        var button = document.createElement('button')
+        button.innerText = "Supprimer"
+        var where = value.querySelector(".link-button")
+        where.append(button)
+        button.addEventListener("click", (e) => {
+            value.remove()
+        })
+    }
+}
+
 //-------------Refresh datas--------------
 
 // Refresh each specified datas
@@ -354,4 +368,6 @@ datas_refresher("create")
 // type2: Array of Objects each of which contains all datas from a single card
 add_cardFromJson(all_datas, "type1")
 add_cardFromJson(all_datas_2, "type2")
+
+delete_card()
 //}
