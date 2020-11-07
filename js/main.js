@@ -1,21 +1,21 @@
 //window.onload = function(){
-    
+
 //--------------utilities------------
 
 // Is used to read the content of the given variable in case of an array for dump
-function infinite_loop(out, obj){
+function infinite_loop(out, obj) {
     for (var i in obj) {
-        if (Array.isArray(obj[i])){
+        if (Array.isArray(obj[i])) {
             out += i + ": \n"
             y = obj[i]
-            for (var j in y){
-                if (Array.isArray(y[j])){
+            for (var j in y) {
+                if (Array.isArray(y[j])) {
                     out += "Tableau )à plus de deux niveaux"
                 } else {
                     out += '    ' + j + "-> " + y[j] + "\n"
                 }
             }
-            
+
         } else {
             out += i + ": " + obj[i] + "\n"
             console.log('pascool')
@@ -45,8 +45,8 @@ function get_cardContent() {
     var card_1 = containers[0]
     var card_tags = ["h2", "h3", "p", "button"]
     var card_elements = {}
-    for(let i=0; i<card_tags.length; i++){
-    card_elements[card_tags[i]] = card_1.querySelector(card_tags[i]).innerText
+    for (let i = 0; i < card_tags.length; i++) {
+        card_elements[card_tags[i]] = card_1.querySelector(card_tags[i]).innerText
     }
     console.log(card_elements)
 }
@@ -66,19 +66,19 @@ add_fewStyle()
 console.log(containers.length)
 
 //--------------1.2.2-------------------
-var array_theme = []
+
 
 // Obtains all the themes that are present on the page and displays each different theme once
 function get_arrayTheme() {
+    var array_theme = []
     for (let i = 0; i < containers.length; i++) {
         var theme = containers[i].querySelector("h3").innerHTML
         if (array_theme.includes(theme) === false) {
             array_theme.push(theme)
         }
     }
-    console.log(array_theme)
+    return array_theme
 }
-get_arrayTheme()
 
 //---------------1.2.3-----------------
 
@@ -110,20 +110,46 @@ function add_cardColor() {
 //----------------1.3.1----------------
 
 // Create the navigation menu that will further only show the card which have the same theme as clicked one
-function create_menuNavigation() {
-    var page_title = document.getElementsByTagName('main')
-    var nav_menu = document.createElement('nav')
-    page_title[0].prepend(nav_menu)
-
-    var nav_theme = document.getElementsByTagName('nav')
-    var links = ['#1', '#2', '#3']
-
-    for (let i = 0; i < array_theme.length; i++) {
-        add_tab(array_theme[i], nav_theme[0], links[i])
+function create_menuNavigation(method) {
+    if(method === "create"){
+        var page = document.querySelector('main')
+        var nav = document.createElement('nav')
+        page.prepend(nav)
+        menu = document.querySelector('nav')
+        for (let i = 0; i < array_theme.length; i++) {
+            link = "#"+i
+            add_tab(array_theme[i], menu, link)
+        }
     }
-    return nav_theme
+    if(method === "refresh"){
+        menu = document.querySelector('nav')
+        index = array_theme.length+1
+        link = "#"+index
+
+        console.log(Object.keys(menu.childNodes))
+        console.log("Tableau themes : "+array_theme.length)
+        //add_tab(array_theme[index], menu, link)
+    }
+    
+    // var menu = document.querySelector('nav')
+    // if(method="refresh"){
+    //     if(typeof(menu)!="undefined" && menu!=null){
+    //         menu.remove()
+    //     }
+    // }
+    // var page = document.querySelector('main')
+    // var nav = document.createElement('nav')
+    
+    // page.prepend(nav)
+    // menu = document.querySelector('nav')
+    
+    // for (let i = 0; i < array_theme.length; i++) {
+    //     link = "#"+i
+    //     add_tab(array_theme[i], nav, link)
+    // }
+    
+    return menu
 }
-nav_theme = create_menuNavigation()
 
 //-----------1.3.3------------
 
@@ -132,7 +158,7 @@ function selectAll_button() {
     var link = document.createElement("a")
     link.setAttribute("href", "#")
     link.innerText = "Tous"
-    nav_theme[0].prepend(link)
+    menu.prepend(link)
     return link
 }
 
@@ -144,7 +170,6 @@ function darkMode_button() {
     main.prepend(sombre)
     return sombre
 }
-tous = selectAll_button()
 sombre = darkMode_button()
 
 //------------1.3.4------------
@@ -156,7 +181,7 @@ function add_tab(tab_text, parent_element, link) {
     new_tab.setAttribute("href", link)
     parent_element.append(new_tab)
 }
-//ex: add_tab('Wikipedia', nav_theme[0], "wikipedia.com")
+//ex: add_tab('Wikipedia', nav, "wikipedia.com")
 
 //-----------1.4.1-----------
 
@@ -184,7 +209,8 @@ sombre.addEventListener("click", function () {
 
 // Makes the click on a tab from the menu effective by selecting the cards with corresponding theme
 function display_selectedCards() {
-    var all_tabs = document.querySelectorAll("a")
+    var all_tabs = document.querySelectorAll("nav a")
+
     for (let i = 0; i < all_tabs.length; i++) {
         all_tabs[i].addEventListener("click", function () {
             for (let j = 0; j < containers.length; j++) {
@@ -204,8 +230,6 @@ function display_selectedCards() {
     }
 }
 
-display_selectedCards()
-
 //--------------2.1.1---------------
 
 var all_datas = [tab_titles,
@@ -218,27 +242,21 @@ var cards = []
 
 // Add the possibility to create a card from different methods, default method is by json
 // Also makes possible to create a new card with datas emmited by a form completed by the user
-function add_new_card(all_cards, method='json'){
-    if(method=='byHand'){
+function add_new_card(all_cards, method = 'json') {
+    if (method == 'byHand') {
         var byHand = 'up-to-date'
         var previous_cards = document.querySelectorAll(".up-to-date")
-        console.log(previous_cards)
-    } else { var byHand = '' }
-    
-    if(typeof previous_cards !=='undefined' && previous_cards.length > 0){
-        console.log('c cool')
+    } else {
+        var byHand = ''
+    }
+
+    if (typeof previous_cards !== 'undefined' && previous_cards.length > 0) {
         previous_cards.forEach(element => {
             element.remove()
         });
     }
 
     for (i = 0; i < all_cards.length; i++) {
-        // if (count == 0) {
-        //     //test de l'obtention des bonnes valeurs
-        //     for (let j = 0; j < all_cards[i].length; j++) {
-        //         console.log(all_cards[i][j]);
-        //     }
-        // }
         card_to_add = `<div class="link-card ${byHand}">
                             <div class="link-title">
                                 <h2>${all_cards[i][0]}</h2>
@@ -256,12 +274,11 @@ function add_new_card(all_cards, method='json'){
 
         var containers1 = document.querySelector(".layout")
         containers1.innerHTML += card_to_add
-        add_cardHover()
-        add_cardColor()
+        datas_refresher()
     }
 }
 
-// Update the given the tab that will be given to add each new card
+// Update the given the tab that will further be given to add each new card
 function update_card_list() {
     // With this lopp we suppose that each field of a card can't be empty or null > 
     for (let i = 0; i < tab_titles.length; i++) {
@@ -272,17 +289,16 @@ function update_card_list() {
     }
     add_new_card(cards)
 }
-update_card_list()
 
 //------------2.2------------
 let submit_form = document.getElementById("submit_form")
 var count = 0
 var new_card = []
 
-submit_form.addEventListener("click",get_new_card)
+submit_form.addEventListener("click", get_new_card)
 
 // Obtains the value emmited by the user when clicking on submit button and check its validity
-function get_new_card(){
+function get_new_card() {
     c_title = document.getElementById("title").value
     c_theme = document.getElementById("theme").value
     c_recap = document.getElementById("recap").value
@@ -290,21 +306,60 @@ function get_new_card(){
     new_card[count] = [c_title, c_theme, c_recap, c_link]
     store_added_cards = new_card
     checked_card = check_pass(new_card, count);
-    if(checked_card[count]!=null){
+    if (checked_card[count] != null) {
         add_new_card(checked_card, 'byHand')
         count++
-    } else { alert("Tous les champs du formulaire doivent être remplis !")}
+    } else {
+        alert("Tous les champs du formulaire doivent être remplis !")
+    }
 }
 
 // Check if each field of the card isn't empty
-function check_pass(card, index){
+function check_pass(card, index) {
     card[index].forEach(element => {
-        if(element==''){
-            card[index]=null
+        if (element == '') {
+            card[index] = null
         }
     })
     return card
 }
 
-//}
+//-------------Refresh datas--------------
 
+// Refresh each specified datas
+
+// Some parameters are set to false by default, and that's because they create element
+// which means that you don't want to call them multiple times and are mostlikely to be turned off
+function datas_refresher(method="refresh") {
+    // Check if any new card was added
+    containers = document.querySelectorAll(".link-card")
+
+    // Get each new themes on the page
+    array_theme = get_arrayTheme()
+
+    // If you want to give the user the possibility to set a new color : add_cardColor(color)
+    // Add color for each different theme
+    add_cardColor()
+    
+    // Create a new navigation link for each theme
+    menu = create_menuNavigation(method)
+
+    if(method === "create"){
+        // Add a new button to display all cards
+        tous = selectAll_button()
+    }
+
+    // Makes each nav link working properly
+    display_selectedCards()
+
+    // Add the hover effect on each card
+    add_cardHover()
+
+    // Refresh the whole card list at the end   
+    containers = document.querySelectorAll(".link-card")
+}
+datas_refresher("create")
+
+// Update the list of cards with the datas from JSON
+update_card_list()
+//}
