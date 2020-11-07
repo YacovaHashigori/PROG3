@@ -1,4 +1,4 @@
-let tab_titres = [
+let tab_titles = [
 	'Compile Hero',
 	'JS Weekly',
 	'Alsacréations',
@@ -22,7 +22,7 @@ let tab_themes = [
 	'Culture Web',
 ];
 
-let tab_liens = [
+let tab_links = [
 	'https://github.com/Wscats/compile-hero',
 	'https://javascriptweekly.com/',
 	'https://alsacreations.com/',

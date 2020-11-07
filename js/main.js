@@ -1,5 +1,8 @@
-window.onload = function(){
-    //--------------utilities------------
+//window.onload = function(){
+    
+//--------------utilities------------
+
+// Is used to read the content of the given variable in case of an array for dump
 function infinite_loop(out, obj){
     for (var i in obj) {
         if (Array.isArray(obj[i])){
@@ -21,9 +24,9 @@ function infinite_loop(out, obj){
     return out;
 }
 
+// Ables you to read the content of a given variable from type : array, string, number
 function dump(obj) {
     var out = '';
-
     out += infinite_loop(out, obj);
     out += '---------------------';
     var pre = document.createElement('pre');
@@ -32,21 +35,21 @@ function dump(obj) {
 }
 
 //-----------------1.1.1-------------
-var conteneur = document.querySelectorAll(".link-card");
+var container = document.querySelectorAll(".link-card");
 
+// This function obtains the differents information about the first card of the DOM and log it
 function get_cardContent() {
 
-    var card_1 = conteneur[0];
-    //récupère la card-1 poru pouvoir en extraire les éléments
+    // Get the first container (card) of the DOM
+    var card_1 = container[0];
+    
     var title_1 = card_1.querySelector("h2").innerText;
     var subtitle_1 = card_1.querySelector("h3").innerText;
-    var resume_1 = card_1.querySelector("p").innerText;
-
+    var recap_1 = card_1.querySelector("p").innerText;
     var temp = card_1.getElementsByTagName("button");
     var link_1 = temp[0].getAttribute("href");
-    //création d'un tableau contenant toutes les informations d'une carte
-    var info_card_1 = [title_1, subtitle_1, resume_1, link_1];
-    //affichage à l'aide d'une boucle
+    
+    var info_card_1 = [title_1, subtitle_1, recap_1, link_1];
     for (let i = 0; i < 4; i++) {
         console.log(info_card_1[i]);
     }
@@ -54,49 +57,56 @@ function get_cardContent() {
 get_cardContent();
 
 //-----------------1.1.2------------------
-function get_classList() {
-    var titre_principal = document.querySelector("main>h1");
-    titre_principal.classList.add("main_title_modified");
-    conteneur[0].classList.add("active-card");
+
+// Modifies the appearence of the main title, and add an hover effect for the first card of the DOM
+function add_fewStyle() {
+    var main_title = document.querySelector("main>h1");
+    main_title.classList.add("main_title_modified");
+    container[0].classList.add("active-card");
 }
-get_classList();
+add_fewStyle();
 
 //---------------1.2.1-------------------
-console.log(conteneur.length);
+console.log(container.length);
 
 //--------------1.2.2-------------------
-var tableau_theme = [];
+var array_theme = [];
 
-function get_tableauTheme() {
-    for (let i = 0; i < conteneur.length; i++) {
-        var theme = conteneur[i].querySelector("h3").innerHTML;
-        if (tableau_theme.includes(theme) === false) {
-            tableau_theme.push(theme);
+// Obtains all the themes that are present on the page and displays each different theme once
+function get_arrayTheme() {
+    for (let i = 0; i < container.length; i++) {
+        var theme = container[i].querySelector("h3").innerHTML;
+        if (array_theme.includes(theme) === false) {
+            array_theme.push(theme);
         }
     }
-    console.log(tableau_theme);
+    console.log(array_theme);
 }
-get_tableauTheme();
+get_arrayTheme();
 
 //---------------1.2.3-----------------
+
+// Add a hover animation on each card
 function add_cardHover() {
-    for (let i = 0; i < conteneur.length; i++) {
-        conteneur[i].classList.add("active-card");
+    for (let i = 0; i < container.length; i++) {
+        container[i].classList.add("active-card");
     }
 }
 add_cardHover();
 
 //--------------1.2.4-----------------
+
+// Modifies the color of the theme of each card depending on the kind of theme
 function add_cardColor() {
-    var tableau_couleurs = ["red", "orange", "sunshine"];
+    var array_colors = ["red", "orange", "sunshine"];
     var card_title = document.querySelectorAll(".link-text > h3");
 
     for (let i = 0; i < card_title.length; i++) {
         var current_theme = card_title[i].innerText;
-        for (let j = 0; j < tableau_theme.length; j++) {
+        for (let j = 0; j < array_theme.length; j++) {
 
-            if (current_theme.includes(tableau_theme[j])) {
-                card_title[i].classList.add(tableau_couleurs[j]);
+            if (current_theme.includes(array_theme[j])) {
+                card_title[i].classList.add(array_colors[j]);
             }
         }
     }
@@ -104,22 +114,26 @@ function add_cardColor() {
 add_cardColor();
 
 //----------------1.3.1----------------
+
+// Create the navigation menu that will further only show the card which have the same theme as clicked one
 function create_menuNavigation() {
-    var titre_page = document.getElementsByTagName('main');
-    var menu_nav = document.createElement('nav');
-    titre_page[0].prepend(menu_nav);
+    var page_title = document.getElementsByTagName('main');
+    var nav_menu = document.createElement('nav');
+    page_title[0].prepend(nav_menu);
 
     var nav_theme = document.getElementsByTagName('nav');
-    var liens = ['#1', '#2', '#3'];
+    var links = ['#1', '#2', '#3'];
 
-    for (let i = 0; i < tableau_theme.length; i++) {
-        add_tab(tableau_theme[i], nav_theme[0], liens[i]);
+    for (let i = 0; i < array_theme.length; i++) {
+        add_tab(array_theme[i], nav_theme[0], links[i]);
     }
     return nav_theme;
 }
 nav_theme = create_menuNavigation();
 
 //-----------1.3.3------------
+
+// Add a button that will allow to show all cards
 function selectAll_button() {
     var link = document.createElement("a");
     link.setAttribute("href", "#");
@@ -128,6 +142,7 @@ function selectAll_button() {
     return link;
 }
 
+// Creates a button for darkmode
 function darkMode_button() {
     var sombre = document.createElement("button");
     var main = document.querySelector("main");
@@ -139,6 +154,8 @@ tous = selectAll_button();
 sombre = darkMode_button();
 
 //------------1.3.4------------
+
+// Allow to add a single menu element at a time, specifying its attributes
 function add_tab(tab_text, parent_element, link) {
     var new_tab = document.createElement("a");
     new_tab.innerText = tab_text;
@@ -148,6 +165,8 @@ function add_tab(tab_text, parent_element, link) {
 //ex: add_tab('Wikipedia', nav_theme[0], "wikipedia.com");
 
 //-----------1.4.1-----------
+
+// Those events makes the appearence of the darkmode button change when hovered
 sombre.addEventListener("mouseenter", function () {
     sombre.classList.add("active_sombre");
 })
@@ -157,6 +176,7 @@ sombre.addEventListener("mouseleave", function () {
 
 //----------1.4.2-----------
 var body = document.querySelector("body");
+// This event makes sure the click on the darkmode button works just fine
 sombre.addEventListener("click", function () {
     body.classList.toggle("mode_sombre");
     if (body.getAttribute("class") === "mode_sombre") {
@@ -167,20 +187,22 @@ sombre.addEventListener("click", function () {
 });
 
 //----------1.4.3-----------
-function create_allTabs() {
+
+// Makes the click on a tab from the menu effective by selecting the cards with corresponding theme
+function display_selectedCards() {
     var all_tabs = document.querySelectorAll("a");
     for (let i = 0; i < all_tabs.length; i++) {
         all_tabs[i].addEventListener("click", function () {
-            for (let j = 0; j < conteneur.length; j++) {
-                conteneur[j].classList.remove("visible", "hidden");
+            for (let j = 0; j < container.length; j++) {
+                container[j].classList.remove("visible", "hidden");
                 if (i === 0) {
-                    conteneur[j].classList.remove("hidden");
+                    container[j].classList.remove("hidden");
                 } else {
-                    var verif_theme = conteneur[j].querySelector("h3").innerHTML;
+                    var verif_theme = container[j].querySelector("h3").innerHTML;
                     if (verif_theme.includes(all_tabs[i].innerHTML)) {
-                        conteneur[j].classList.add("visible");
+                        container[j].classList.add("visible");
                     } else {
-                        conteneur[j].classList.add("hidden");
+                        container[j].classList.add("hidden");
                     }
                 }
             }
@@ -188,18 +210,20 @@ function create_allTabs() {
     }
 }
 
-create_allTabs();
+display_selectedCards();
 
 //--------------2.1.1---------------
 
-var all_datas = [tab_titres,
+var all_datas = [tab_titles,
     tab_themes,
     tab_descriptions,
-    tab_liens
+    tab_links
 ];
 
 var cards = [];
 
+// Add the possibility to create a card from different methods, default method is by json
+// Also makes possible to create a new card with datas emmited by a form completed by the user
 function add_new_card(all_cards, method='json'){
     if(method=='byHand'){
         var byHand = 'up-to-date'
@@ -221,7 +245,7 @@ function add_new_card(all_cards, method='json'){
         //         console.log(all_cards[i][j]);
         //     }
         // }
-        carte_sup = `<div class="link-card ${byHand}">
+        card_to_add = `<div class="link-card ${byHand}">
                         <div class="link-title">
                             <h2>${all_cards[i][0]}</h2>
                         </div>
@@ -236,13 +260,15 @@ function add_new_card(all_cards, method='json'){
                         </div>
                     </div>`;
 
-        var conteneur1 = document.querySelector(".layout");
-        conteneur1.innerHTML += carte_sup;      
+        var container1 = document.querySelector(".layout");
+        container1.innerHTML += card_to_add;      
     }
 }
 
+// Update the given the tab that will be given to add each new card
 function update_card_list() {
-    for (let i = 0; i < tab_titres.length; i++) {
+    // With this lopp we suppose that each field of a card can't be empty or null > 
+    for (let i = 0; i < tab_titles.length; i++) {
         cards[i] = [];
         for (let j = 0; j < all_datas.length; j++) {
             cards[i].push(all_datas[j][i]);
@@ -261,16 +287,17 @@ var new_card = [];
 
 submit_form.addEventListener("click",get_new_card);
 
+// Obtains the value emmited by the user when clicking on submit button 
 function get_new_card(){
     c_title = document.getElementById("title").value;
     c_theme = document.getElementById("theme").value;
-    c_resume = document.getElementById("resume").value;
+    c_recap = document.getElementById("recap").value;
     c_link = document.getElementById("link").value;
-    new_card[count] = [c_title, c_theme, c_resume, c_link];
+    new_card[count] = [c_title, c_theme, c_recap, c_link];
     store_added_cards = new_card;
     add_new_card(new_card, 'byHand');
     count++;
 }
 
-}
+//}
 
