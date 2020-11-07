@@ -6,8 +6,11 @@ html{
     box-sizing:inherit;
 }
 :root{
-    --dark:rgb(26, 26, 26);
-    --lemon:rgb(0, 255, 200);
+    --darko:rgb(26, 26, 26);
+    --acidlemon:rgb(0, 255, 200);
+    --tastyblue:rgb(129, 251, 255);
+    --sparklegreen:rgb(78, 255, 93);
+    --spicypurple: #d502fffa;
 }
 body{
     font-family:Lato;
@@ -27,7 +30,7 @@ a{
     letter-spacing:0.1rem;
     margin-left:10px;
     text-decoration:underline;
-    color:var(--lemon);
+    color:var(--acidlemon);
 }
 
 /* Specific */
@@ -59,7 +62,7 @@ a{
 }
 .link-title{
     height:40px;
-    background:#001441;
+    background:var(--spicypurple);
     color:white;
     padding-top:5px;
 }
@@ -72,12 +75,12 @@ a{
 .link-button{
     height:40%;
     border-top:solid 1px lightgrey;
-    background:rgb(223, 223, 223);
+    background:var(--sparklegreen);
 }
 .link-button button{
     height:30px;
     width:120px;
-    background:#1350d4;
+    background:var(--tastyblue);
     border:none;
     border-radius:5px;
     -webkit-border-radius:5px;
@@ -87,7 +90,7 @@ a{
 }
 /*---------------- Utilities for JS ----------------*/
 .main_title_modified{
-    color:var(--lemon);
+    color:var(--acidlemon);
     font-size:34px;
     font-weight:700;
     letter-spacing:0.25rem;
@@ -113,11 +116,11 @@ a{
     color:rgb(248, 252, 10);
 }
 .active_sombre{
-    background-color:var(--dark);
+    background-color:var(--darko);
     color:white;
 }
 .mode_sombre{
-    background-color:var(--dark);
+    background-color:var(--darko);
     color:white;
 }
 .visible{
@@ -135,8 +138,8 @@ a{
     width:50%;
     margin:5vh auto;
     padding:2.5vw;
-    background-color: rgb(223, 223, 223);
-    border:5px solid #001441;
+    background-color: var(--sparklegreen);
+    border:5px solid var(--spicypurple);
     border-radius:2rem;
     -webkit-border-radius:2rem;
     -moz-border-radius:2rem;

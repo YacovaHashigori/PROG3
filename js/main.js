@@ -111,50 +111,32 @@ function add_cardColor() {
 
 // Create the navigation menu that will further only show the card which have the same theme as clicked one
 function create_menuNavigation(method) {
-    if(method === "create"){
+    if (method === "create") {
         var page = document.querySelector('main')
         var nav = document.createElement('nav')
         page.prepend(nav)
         menu = document.querySelector('nav')
         for (let i = 0; i < array_theme.length; i++) {
-            link = "#"+i
+            link = "#" + i
             add_tab(array_theme[i], menu, link)
         }
     }
-    if(method === "refresh"){
+    if (method === "refresh") {
         menu = document.querySelector('nav')
-        index = array_theme.length+1
-        link = "#"+index
-
-        console.log(Object.keys(menu.childNodes))
-        console.log("Tableau themes : "+array_theme.length)
-        //add_tab(array_theme[index], menu, link)
+        index = array_theme.length - 1
+        link = "#" + index
+        items_in_menu = Object.keys(menu.childNodes).length - 1
+        if (items_in_menu < array_theme.length) {
+            add_tab(array_theme[index], menu, link)
+        }
     }
-    
-    // var menu = document.querySelector('nav')
-    // if(method="refresh"){
-    //     if(typeof(menu)!="undefined" && menu!=null){
-    //         menu.remove()
-    //     }
-    // }
-    // var page = document.querySelector('main')
-    // var nav = document.createElement('nav')
-    
-    // page.prepend(nav)
-    // menu = document.querySelector('nav')
-    
-    // for (let i = 0; i < array_theme.length; i++) {
-    //     link = "#"+i
-    //     add_tab(array_theme[i], nav, link)
-    // }
-    
     return menu
 }
 
 //-----------1.3.3------------
 
 // Add a button that will allow to show all cards
-function selectAll_button() {
+function button_selectAll() {
     var link = document.createElement("a")
     link.setAttribute("href", "#")
     link.innerText = "Tous"
@@ -163,14 +145,14 @@ function selectAll_button() {
 }
 
 // Creates a button for darkmode
-function darkMode_button() {
+function button_darkMode() {
     var sombre = document.createElement("button")
     var main = document.querySelector("main")
     sombre.innerHTML = "Mode Sombre"
     main.prepend(sombre)
     return sombre
 }
-sombre = darkMode_button()
+sombre = button_darkMode()
 
 //------------1.3.4------------
 
@@ -232,17 +214,16 @@ function display_selectedCards() {
 
 //--------------2.1.1---------------
 
+// création d'un tableau d'objets JSON (chaque objet contenant un champ spécifique)
 var all_datas = [tab_titles,
     tab_themes,
     tab_descriptions,
     tab_links
 ]
 
-var cards = []
-
 // Add the possibility to create a card from different methods, default method is by json
 // Also makes possible to create a new card with datas emmited by a form completed by the user
-function add_new_card(all_cards, method = 'json') {
+function add_newCard(all_cards, method = 'json') {
     if (method == 'byHand') {
         var byHand = 'up-to-date'
         var previous_cards = document.querySelectorAll(".up-to-date")
@@ -279,15 +260,23 @@ function add_new_card(all_cards, method = 'json') {
 }
 
 // Update the given the tab that will further be given to add each new card
-function update_card_list() {
-    // With this lopp we suppose that each field of a card can't be empty or null > 
-    for (let i = 0; i < tab_titles.length; i++) {
-        cards[i] = []
-        for (let j = 0; j < all_datas.length; j++) {
-            cards[i].push(all_datas[j][i])
+function add_cardFromJson(all_datas, typeOfJSON) {
+    var cards = []
+    // With this lopp we suppose that each field of a card can't be empty or null
+    if(typeOfJSON === "type1"){ 
+        for (let i = 0; i < all_datas[0].length; i++) {
+            cards[i] = []
+            for (let j = 0; j < all_datas.length; j++) {
+                    cards[i].push(all_datas[j][i])
+            }
         }
     }
-    add_new_card(cards)
+    if(typeOfJSON === "type2"){ 
+        for (let i = 0; i < all_datas.length; i++){
+            cards[i] = Object.values(all_datas[i])
+        }
+    }
+    add_newCard(cards)
 }
 
 //------------2.2------------
@@ -307,7 +296,7 @@ function get_new_card() {
     store_added_cards = new_card
     checked_card = check_pass(new_card, count);
     if (checked_card[count] != null) {
-        add_new_card(checked_card, 'byHand')
+        add_newCard(checked_card, 'byHand')
         count++
     } else {
         alert("Tous les champs du formulaire doivent être remplis !")
@@ -330,7 +319,7 @@ function check_pass(card, index) {
 
 // Some parameters are set to false by default, and that's because they create element
 // which means that you don't want to call them multiple times and are mostlikely to be turned off
-function datas_refresher(method="refresh") {
+function datas_refresher(method = "refresh") {
     // Check if any new card was added
     containers = document.querySelectorAll(".link-card")
 
@@ -340,20 +329,20 @@ function datas_refresher(method="refresh") {
     // If you want to give the user the possibility to set a new color : add_cardColor(color)
     // Add color for each different theme
     add_cardColor()
-    
+
     // Create a new navigation link for each theme
     menu = create_menuNavigation(method)
 
-    if(method === "create"){
+    if (method === "create") {
         // Add a new button to display all cards
-        tous = selectAll_button()
+        tous = button_selectAll()
     }
-
-    // Makes each nav link working properly
-    display_selectedCards()
 
     // Add the hover effect on each card
     add_cardHover()
+
+    // Makes each nav link working properly
+    display_selectedCards()
 
     // Refresh the whole card list at the end   
     containers = document.querySelectorAll(".link-card")
@@ -361,5 +350,8 @@ function datas_refresher(method="refresh") {
 datas_refresher("create")
 
 // Update the list of cards with the datas from JSON
-update_card_list()
+// type1: Array of multiple Arrays each of which represent one element of card (title, desc, ...)
+// type2: Array of Objects each of which contains all datas from a single card
+add_cardFromJson(all_datas, "type1")
+add_cardFromJson(all_datas_2, "type2")
 //}
