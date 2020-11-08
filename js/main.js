@@ -122,23 +122,39 @@ function menuNavigation(method) {
         }
     }
     if (method === "refresh") {
-        menu = document.querySelector('nav');
-        index = array_theme.length - 1;
+        // Check current menu
+        var items = look_currentMenu();
+        // Menu_size and index have both -1 to their length property because of the All tab present in the menu
+        menu_size = items.length-1;
+        // Search how many themes are present in the list of cards
+        array_theme = get_arrayTheme();
+        index = array_theme.length-1;
         link = "#" + index;
-        items_in_menu = Object.keys(menu.childNodes).length - 1;
-        console.log(items_in_menu);
-        console.log(array_theme.length);
-        console.log('--------------');
-        if (items_in_menu < array_theme.length) {
+        // If elements have been added
+        if (menu_size < array_theme.length) {
             add_tab(array_theme[index], menu, link);
-        } else if(items_in_menu > array_theme.length){
-            console.log("cas2");
-            remove_tab(items_in_menu[index]);
+            // Refresh the current list of items in the displayed menu after each modification
+            items = look_currentMenu();
+            menu_size = items.length-1;
+        }
+        // If an element was deleted
+        if (menu_size > array_theme.length){
+            for(var j = 0; j < menu_size; j++){
+                if(items[j+1].innerText != array_theme[j]){
+                    break;
+                }
+            }
+            remove_tab(items[j+1]);
         }
     }
     return menu;
 }
 
+function look_currentMenu(){
+    menu = document.querySelector('nav');
+    items_in_menu = Object.values(menu.childNodes);
+    return items_in_menu;
+}
 //-----------1.3.3------------
 
 // Add a button that will allow to show all cards
@@ -173,7 +189,7 @@ function add_tab(tab_text, parent_element, link) {
 
 function remove_tab(tab) {
     console.log(tab);
-    //tab.remove();
+    tab.remove();
 }
 //-----------1.4.1-----------
 
@@ -362,6 +378,7 @@ function click_deleteCard(){
     buttons.forEach(item => {
         item.addEventListener('click', event => {
           event.target.parentElement.parentElement.remove();
+          refresh_list();
           menuNavigation("refresh");
         });
       });
@@ -376,6 +393,9 @@ function click_deleteCard(){
 function datas_refresher(method = "refresh") {
     // Check if any new card was added
     refresh_list();
+
+    // Add a delete button on each card
+    button_deleteCard(method);
 
     // Get each new themes on the page
     array_theme = get_arrayTheme();
@@ -393,10 +413,7 @@ function datas_refresher(method = "refresh") {
     }
 
     // Add the hover effect on each card
-    add_cardHover();
-
-    // Add a delete button on each card
-    button_deleteCard(method);
+    add_cardHover();    
 
     // Makes each nav link working properly
     display_selectedCards();
