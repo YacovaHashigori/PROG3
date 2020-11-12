@@ -31,9 +31,9 @@ let tab_links = [
 ];
 
 let tab_images = [
-  "images/page_compileHero.png",
-  "images/page_jsWeekly.png",
-  "images/page_alsacreation.png",
-  "images/page_smashingMagazine.png",
-  "images/page_theNextWeb.png",
+  "page_compileHero.png",
+  "page_jsWeekly.png",
+  "page_alsacreation.png",
+  "page_smashingMagazine.png",
+  "page_theNextWeb.png",
 ];

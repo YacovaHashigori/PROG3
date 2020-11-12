@@ -184,7 +184,6 @@ function add_tab(tab_text, parent_element, link) {
 //ex: add_tab('Wikipedia', nav, "wikipedia.com")
 
 function remove_tab(tab) {
-  console.log(tab);
   tab.remove();
 }
 //-----------1.4.1-----------
@@ -266,21 +265,7 @@ function add_newCard(all_cards, method = "json") {
   }
 
   for (i = 0; i < all_cards.length; i++) {
-    card_to_add = `<div class="link-card ${byHand}">
-                            <div class="link-title">
-                                <h2>${all_cards[i][0]}</h2>
-                            </div>
-                            <div class="link-text">
-                                <img src="${all_cards[i][4]}" alt="" style="max-width:100%">
-                                <h3>${all_cards[i][1]}</h3>
-                                <p>${all_cards[i][2]}</p>
-                            </div>
-                            <div class="link-button">
-                                <a href="${all_cards[i][3]}">
-                                    <button>Aller à la page</button>
-                                </a>
-                            </div>
-                        </div>`;
+    card_to_add = card_template(byHand, all_cards, i);
 
     var containers1 = document.querySelector(".layout");
     containers1.innerHTML += card_to_add;
@@ -308,6 +293,43 @@ function add_cardFromJson(all_datas, typeOfJSON) {
   add_newCard(cards);
 }
 
+function card_template(mark, all_cards, index) {
+  var card_to_add = `<div class="link-card ${mark}">`;
+
+  card_to_add += `<div class="link-title">
+    <h2>${all_cards[index][0]}</h2>
+    </div>`;
+
+  card_to_add += `<div class="link-text">`;
+  var path_to_img = `images/${all_cards[index][4]}`;
+  ImageExist(path_to_img, function add_cardImage() {
+    card_to_add += `<img class="card_image" src="${path_to_img}" alt="" style="max-width:100%">`;
+  });
+  card_to_add += `<h3>${all_cards[index][1]}</h3>
+  <p>${all_cards[index][2]}</p>
+  </div>
+  `;
+
+  card_to_add += `<div class="link-button">
+  <a href="${all_cards[index][3]}">
+  <button>Aller à la page</button>
+  </a>
+  </div>`;
+
+  card_to_add += `</div>`;
+
+  return card_to_add;
+}
+
+function ImageExist(url, callback) {
+  var img = new Image();
+  img.src = url;
+  console.log(img.height != 0);
+  if (img.height != 0) {
+    callback();
+  }
+}
+
 //------------2.2------------
 let submit_form = document.getElementById("submit_form");
 var count = 0;
@@ -321,7 +343,8 @@ function get_new_card() {
   c_theme = document.getElementById("theme").value;
   c_recap = document.getElementById("recap").value;
   c_link = document.getElementById("link").value;
-  new_card[count] = [c_title, c_theme, c_recap, c_link];
+  c_image = document.getElementById("image").value;
+  new_card[count] = [c_title, c_theme, c_recap, c_link, c_image];
   store_added_cards = new_card;
   checked_card = check_pass(new_card, count);
   if (checked_card[count] != null) {
@@ -383,6 +406,18 @@ function click_deleteCard() {
   });
 }
 
+//-----------------2.7--------------------
+function click_image() {
+  var card_images = document.querySelectorAll(".card_image");
+  Array.from(card_images).forEach((item) => {
+    console.log(item);
+    item.addEventListener("click", zoom_image());
+  });
+}
+
+function zoom_image() {
+  console.log("bamite");
+}
 //-------------Refresh datas--------------
 
 // Refresh each specified datas
@@ -429,5 +464,6 @@ datas_refresher("create");
 // type2: Array of Objects each of which contains all datas from a single card
 add_cardFromJson(all_datas, "type1");
 add_cardFromJson(all_datas_2, "type2");
+click_image();
 
 //}
