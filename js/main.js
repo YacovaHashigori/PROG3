@@ -34,6 +34,41 @@ function dump(obj) {
   // could be usefull : alert(JSON.stringify(card_1, null, 4))
 }
 
+// This function makes you able to clone the element entered as parameter
+// it has one constraint : element hasn't more than one reference to the same data in the object
+function clone(obj) {
+  var copy;
+
+  // Handle the 3 simple types, and null or undefined
+  if (null == obj || "object" != typeof obj) return obj;
+
+  // Handle Date
+  if (obj instanceof Date) {
+    copy = new Date();
+    copy.setTime(obj.getTime());
+    return copy;
+  }
+
+  // Handle Array
+  if (obj instanceof Array) {
+    copy = [];
+    for (var i = 0, len = obj.length; i < len; i++) {
+      copy[i] = clone(obj[i]);
+    }
+    return copy;
+  }
+
+  // Handle Object
+  if (obj instanceof Object) {
+    copy = {};
+    for (var attr in obj) {
+      if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);
+    }
+    return copy;
+  }
+
+  throw new Error("Unable to copy obj! Its type isn't supported.");
+}
 //-----------------1.1.1-------------
 var containers = document.querySelectorAll(".link-card");
 
@@ -106,7 +141,7 @@ function add_cardColor() {
 //----------------1.3.1----------------
 
 // Create the navigation menu that will further only show the card which have the same theme as clicked one
-function menuNavigation(method) {
+function menu_navigation(method) {
   if (method === "create") {
     var page = document.querySelector("main");
     var nav = document.createElement("nav");
@@ -324,7 +359,6 @@ function card_template(mark, all_cards, index) {
 function ImageExist(url, callback) {
   var img = new Image();
   img.src = url;
-  console.log(img.height != 0);
   if (img.height != 0) {
     callback();
   }
@@ -401,7 +435,7 @@ function click_deleteCard() {
     item.addEventListener("click", (event) => {
       event.target.parentElement.parentElement.remove();
       refresh_list();
-      menuNavigation("refresh");
+      menu_navigation("refresh");
     });
   });
 }
@@ -409,14 +443,24 @@ function click_deleteCard() {
 //-----------------2.7--------------------
 function click_image() {
   var card_images = document.querySelectorAll(".card_image");
-  Array.from(card_images).forEach((item) => {
-    console.log(item);
-    item.addEventListener("click", zoom_image());
+  Array.from(card_images).forEach(function (item) {
+    item.addEventListener("click", zoom_image);
   });
 }
 
 function zoom_image() {
-  console.log("bamite");
+  var zoom = document.createElement("div");
+  zoom.classList.add("zoom");
+
+  zoom.addEventListener("click", (e) => {
+    zoom.remove();
+  });
+
+  var page = document.querySelector("body");
+  page.prepend(zoom);
+
+  var cloned_item = this.cloneNode();
+  zoom.append(cloned_item);
 }
 //-------------Refresh datas--------------
 
@@ -439,7 +483,7 @@ function datas_refresher(method = "refresh") {
   add_cardColor();
 
   // Create a new navigation link for each theme
-  menu = menuNavigation(method);
+  menu = menu_navigation(method);
 
   if (method === "create") {
     // Add a new button to display all cards
