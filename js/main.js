@@ -241,7 +241,13 @@ function showOrHide(i, all_tabs) {
 //--------------2.1.1---------------
 
 // création d'un tableau d'objets JSON (chaque objet contenant un champ spécifique)
-var all_datas = [tab_titles, tab_themes, tab_descriptions, tab_links];
+var all_datas = [
+  tab_titles,
+  tab_themes,
+  tab_descriptions,
+  tab_links,
+  tab_images,
+];
 
 // Add the possibility to create a card from different methods, default method is by json
 // Also makes possible to create a new card with datas emmited by a form completed by the user
@@ -265,6 +271,7 @@ function add_newCard(all_cards, method = "json") {
                                 <h2>${all_cards[i][0]}</h2>
                             </div>
                             <div class="link-text">
+                                <img src="${all_cards[i][4]}" alt="" style="max-width:100%">
                                 <h3>${all_cards[i][1]}</h3>
                                 <p>${all_cards[i][2]}</p>
                             </div>
