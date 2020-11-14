@@ -459,8 +459,33 @@ function zoom_image() {
   var page = document.querySelector("body");
   page.prepend(zoom);
 
-  var cloned_item = this.cloneNode();
-  zoom.append(cloned_item);
+  var cloned_image = this.cloneNode();
+  zoom.append(cloned_image);
+}
+
+function modify_cardTitle() {
+  var titles = document.querySelectorAll(".link-title h2");
+  Array.from(titles).forEach((item) => {
+    item.addEventListener("click", replace_titleByInput);
+  });
+}
+
+function replace_titleByInput() {
+  var input = document.createElement("input");
+  input.type = "text";
+  this.parentElement.replaceChild(input, this);
+  input.focus();
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      var new_title = document.createElement("h2");
+      new_title.innerText = input.value;
+      input.parentElement.replaceChild(new_title, input);
+      modify_cardTitle();
+    } else if (e.key === "Escape") {
+      // #js_variable_scope_is_a_pure_nightmare
+      input.parentElement.replaceChild(this, input);
+    }
+  });
 }
 //-------------Refresh datas--------------
 
@@ -497,17 +522,21 @@ function datas_refresher(method = "refresh") {
   display_selectedCards();
 
   refresh_list();
+
+  click_image();
+
+  modify_cardTitle();
 }
 
 function refresh_list() {
   containers = document.querySelectorAll(".link-card");
 }
 datas_refresher("create");
+
 // Update the list of cards with the datas from JSON
 // type1: Array of multiple Arrays each of which represent one element of card (title, desc, ...)
 // type2: Array of Objects each of which contains all datas from a single card
 add_cardFromJson(all_datas, "type1");
 add_cardFromJson(all_datas_2, "type2");
-click_image();
 
 //}
