@@ -8,17 +8,16 @@ html {
   box-sizing: inherit;
 }
 :root {
-  --dark: rgba(26, 26, 26, 0.96);
-  --yellow: #ffbe0b;
-  --orange: #fb5607;
-  --magenta: #ff006e;
-  --purple: #8338ec;
-  --blue: #3a86ff;
+  --dark: #003049;
+  --red: #d62828;
+  --orange: #f77f00;
+  --yellow: #fcbf49;
+  --white: #eae2b7;
 }
 body {
   font-family: Lato;
   margin: 0;
-  background-color: var(--purple);
+  background-color: var(--white);
   color: white;
 }
 
@@ -27,10 +26,6 @@ nav {
   display: flex;
   justify-content: space-around;
   padding: 20px;
-  background-color: var(--yellow);
-  -webkit-box-shadow: 0 10px 6px -6px var(--dark);
-  -moz-box-shadow: 0 10px 6px -6px var(--dark);
-  box-shadow: 0 10px 6px -6px var(--dark);
 }
 nav a {
   font-size: 1.2rem;
@@ -84,7 +79,7 @@ a {
 /* Main title of cards */
 .link-title {
   height: 40px;
-  background: var(--yellow);
+  background: var(--red);
   padding-top: 5px;
 }
 
@@ -101,10 +96,17 @@ a {
   padding-left: 15px;
   padding-bottom: 15px;
 }
+.card_date {
+  display: block;
+  font-weight: 400;
+  font-size: 11px;
+  width: 20%;
+  margin: 10px 20px 0 auto;
+}
 
 /* Buttons styling */
 .link-button {
-  background: var(--magenta);
+  background: var(--yellow);
   padding: 10px 0px 10px 15px;
 }
 .link-button button {
@@ -143,20 +145,51 @@ a {
 }
 
 /* Set of colors for themes */
-.red {
-  color: red;
+.blue-1 {
+  color: rgb(0, 250, 255, 0.5);
 }
-.orange {
-  color: orange;
+.blue-2 {
+  color: rgb(0, 200, 255, 0.5);
 }
-.sunshine {
-  color: rgb(248, 252, 10);
+.blue-3 {
+  color: rgb(0, 150, 255, 0.5);
+}
+.blue-4 {
+  color: rgb(0, 100, 255, 0.5);
+}
+.blue-5 {
+  color: rgb(0, 50, 255, 0.5);
+}
+.blue-5 {
+  color: rgb(0, 0, 255, 0.5);
 }
 
-/* Hoover effect on darkmode button */
+/* Hoover effect on darkmode button and basic styling of the button*/
+.sombre_button {
+  display: block;
+  height: 40px;
+  margin: 10px 40px 0 auto;
+  padding: 5px 30px;
+  color: var(--dark);
+  border: 2px solid var(--dark);
+  background: transparent;
+  border-radius: 50px;
+}
+.sombre_button:focus {
+  outline: none;
+  box-shadow: none;
+}
+.dark_mode {
+  color: var(--white);
+  border: 2px solid var(--white);
+}
 .active_sombre {
   background-color: var(--dark);
-  color: white;
+  color: var(--white);
+}
+.desactive_sombre {
+  background-color: var(--white);
+  color: var(--dark);
 }
 .mode_sombre {
   background-color: var(--dark);
@@ -180,7 +213,7 @@ a {
   width: 50%;
   margin: 5vh auto;
   padding: 2.5vw;
-  background-color: var(--yellow);
+  background-color: var(--red);
   border-radius: 2rem;
   -webkit-border-radius: 2rem;
   -moz-border-radius: 2rem;

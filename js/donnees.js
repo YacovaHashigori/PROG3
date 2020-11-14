@@ -1,3 +1,4 @@
+// Datas will further be treated as Array of Arrays
 let tab_titles = [
   "Compile Hero",
   "JS Weekly",

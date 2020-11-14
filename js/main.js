@@ -34,8 +34,10 @@ function dump(obj) {
   // could be usefull : alert(JSON.stringify(card_1, null, 4))
 }
 
-// This function makes you able to clone the element entered as parameter
-// it has one constraint : element hasn't more than one reference to the same data in the object
+/* This function makes you able to clone the element entered as parameter
+it has one constraint : element hasn't more than one reference to the same data in the object
+which means that unfortunately it can't apply to Nodelists or Dom objects
+*/
 function clone(obj) {
   var copy;
 
@@ -73,30 +75,32 @@ function clone(obj) {
 var containers = document.querySelectorAll(".link-card");
 
 // This function obtains the NodeList from the first card of the DOM and log it
-function get_cardContent() {
+function get_cardContent(card) {
   // Get the first containers (card) of the DOM
-  var card_1 = containers[0];
   var card_tags = ["h2", "h3", "p", "button"];
   var card_elements = {};
-  for (let i = 0; i < card_tags.length; i++) {
-    card_elements[card_tags[i]] = card_1.querySelector(card_tags[i]).innerText;
+  if (typeof card === "object") {
+    for (let i = 0; i < card_tags.length; i++) {
+      card_elements[card_tags[i]] = card.querySelector(card_tags[i]).innerText;
+    }
   }
   console.log(card_elements);
 }
-get_cardContent();
-
+/* Function can be called to get any card's content via : "get_cardContent(card);"
+it basicaly acts like a dump for a specified card and can also be used to debug
+*/
 //-----------------1.1.2------------------
 
 // Modifies the appearence of the main title, and add an hover effect for the first card of the DOM
 function add_fewStyle() {
   var main_title = document.querySelector("main>h1");
   main_title.classList.add("main_title_modified");
-  containers[0].classList.add("active-card");
+  // containers[0].classList.add("active-card");
 }
 add_fewStyle();
 
 //---------------1.2.1-------------------
-console.log(containers.length);
+// console.log(containers.length);
 
 //--------------1.2.2-------------------
 
@@ -125,7 +129,14 @@ function add_cardHover() {
 
 // Modifies the color of the theme of each card depending on the kind of theme
 function add_cardColor() {
-  var array_colors = ["red", "orange", "sunshine"];
+  var array_colors = [
+    "blue-1",
+    "blue-2",
+    "blue-3",
+    "blue-4",
+    "blue-5",
+    "blue-6",
+  ];
   var card_title = document.querySelectorAll(".link-text > h3");
 
   for (let i = 0; i < card_title.length; i++) {
@@ -202,6 +213,7 @@ function button_darkMode() {
   var sombre = document.createElement("button");
   var main = document.querySelector("main");
   sombre.innerHTML = "Mode Sombre";
+  sombre.classList.add("sombre_button");
   main.prepend(sombre);
   return sombre;
 }
@@ -223,13 +235,38 @@ function remove_tab(tab) {
 }
 //-----------1.4.1-----------
 
-// Those events makes the appearence of the darkmode button change when hovered
-sombre.addEventListener("mouseenter", function () {
-  sombre.classList.add("active_sombre");
-});
-sombre.addEventListener("mouseleave", function () {
-  sombre.classList.remove("active_sombre");
-});
+// Those events makes the appearence of the darkmode button change when hovered && clicked
+function check_darkMode() {
+  sombre.classList.toggle("dark_mode");
+  refresh_darkModeState();
+}
+sombre.addEventListener("click", check_darkMode);
+
+function refresh_darkModeState() {
+  sombre.addEventListener("mouseenter", function () {
+    if (sombre.classList.contains("dark_mode")) {
+      sombre.classList.add("desactive_sombre");
+    } else {
+      sombre.classList.add("active_sombre");
+    }
+  });
+  sombre.addEventListener("mouseleave", function () {
+    if (sombre.classList.contains("dark_mode")) {
+      sombre.classList.remove("desactive_sombre");
+    } else {
+      sombre.classList.remove("active_sombre");
+    }
+  });
+  if (
+    sombre.classList.contains("dark_mode") &&
+    sombre.classList.contains("active_sombre")
+  ) {
+    sombre.classList.remove("active_sombre");
+  } else if (sombre.classList.contains("desactive_sombre")) {
+    sombre.classList.remove("desactive_sombre");
+  }
+}
+refresh_darkModeState();
 
 //----------1.4.2-----------
 var body = document.querySelector("body");
@@ -336,10 +373,20 @@ function card_template(mark, all_cards, index) {
     </div>`;
 
   card_to_add += `<div class="link-text">`;
-  var path_to_img = `images/${all_cards[index][4]}`;
-  ImageExist(path_to_img, function add_cardImage() {
-    card_to_add += `<img class="card_image" src="${path_to_img}" alt="" style="max-width:100%">`;
-  });
+  for (let i = 4; i <= all_cards[index].length; i++) {
+    if (typeof all_cards[index][i] != "undefined") {
+      if (i == 4) {
+        var path_to_img = `images/${all_cards[index][4]}`;
+        ImageExist(path_to_img, function add_cardImage() {
+          card_to_add += `<img class="card_image" src="${path_to_img}" alt="" style="max-width:100%">`;
+        });
+      }
+      if (i == 5) {
+        card_to_add += `<i class="card_date">${all_cards[index][i]}</i>`;
+      }
+    }
+  }
+
   card_to_add += `<h3>${all_cards[index][1]}</h3>
   <p>${all_cards[index][2]}</p>
   </div>
@@ -475,6 +522,7 @@ function replace_titleByInput() {
   input.type = "text";
   this.parentElement.replaceChild(input, this);
   input.focus();
+  var title = this;
   input.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
       var new_title = document.createElement("h2");
@@ -482,8 +530,9 @@ function replace_titleByInput() {
       input.parentElement.replaceChild(new_title, input);
       modify_cardTitle();
     } else if (e.key === "Escape") {
+      input.blur();
       // #js_variable_scope_is_a_pure_nightmare
-      input.parentElement.replaceChild(this, input);
+      input.parentElement.replaceChild(title, input);
     }
   });
 }
