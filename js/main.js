@@ -366,21 +366,29 @@ function add_cardFromJson(all_datas, typeOfJSON) {
 }
 
 function card_template(mark, all_cards, index) {
-  var card_to_add = `<div class="link-card ${mark}">`;
+  var card_to_add = `<div class="link-card ${mark} grid-item">`;
 
   card_to_add += `<div class="link-title">
     <h2>${all_cards[index][0]}</h2>
     </div>`;
 
   card_to_add += `<div class="link-text">`;
+  /* By adding few lines into this loop you'll be able too specify new content to read from JSON
+  However there are some constraints : 
+  - You'll need to specify the correct index and to set the same index to the datas in JSON file
+  - Thoses datas will be showing up in the body of the card (you could also create a function from this loop
+    and repeat it in others sections if wanted)
+  */
   for (let i = 4; i <= all_cards[index].length; i++) {
     if (typeof all_cards[index][i] != "undefined") {
+      // Image
       if (i == 4) {
         var path_to_img = `images/${all_cards[index][4]}`;
         ImageExist(path_to_img, function add_cardImage() {
           card_to_add += `<img class="card_image" src="${path_to_img}" alt="" style="max-width:100%">`;
         });
       }
+      // Date
       if (i == 5) {
         card_to_add += `<i class="card_date">${all_cards[index][i]}</i>`;
       }
