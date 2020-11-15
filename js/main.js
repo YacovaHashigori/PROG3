@@ -7,7 +7,7 @@ function infinite_loop(out, obj) {
   for (var i in obj) {
     if (Array.isArray(obj[i])) {
       out += i + ": \n";
-      y = obj[i];
+      var y = obj[i];
       for (var j in y) {
         if (Array.isArray(y[j])) {
           out += "Tableau )à plus de deux niveaux";
